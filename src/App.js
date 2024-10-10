@@ -61,18 +61,16 @@ function App() {
     }
   }
 
-  function removeTaskHandler(task){
-    if(task === tasks[selectedTaskIndex]){
-      task.finishTime = Date.now()
-      setDeletedTasks([task, ...deletedTasks])
-      setTasks(() => tasks.slice(0, selectedTaskIndex).concat(tasks.slice(selectedTaskIndex + 1, tasks.length)))
-      setSelectedTaskIndex(() => tasks.length > 1 ? mod(selectedTaskIndex, tasks.length - 1) : 0)
-      headerMessageHandler('removeTaskHandler', false)
-    }
+  function removeTasksHandler(tasksToRemove){
+    headerMessageHandler('removeTaskHandler', false)
+    tasksToRemove.map(t => t.finishTime = Date.now())
+    setDeletedTasks([...tasksToRemove, ...deletedTasks])
+    setTasks(() => tasks.filter(t => !tasksToRemove.includes(t)))
+    setSelectedTaskIndex(() => tasks.length > 1 ? mod(selectedTaskIndex, tasks.length - 1) : 0)
   }
 
-  function taskSelectHandler(name){
-    let index = tasks.findIndex(t => t.name === name)
+  function taskSelectHandler(task){
+    let index = tasks.findIndex(t => t.name === task.name)
     index = index >= 0 ? index : 0
     console.log(`index - ${index}`)
     setSelectedTaskIndex(index)
@@ -94,14 +92,12 @@ function App() {
     setSelectedTaskIndex(() => tasks.length > 0 ? mod(selectedTaskIndex + increment, tasks.length) : 0)
   }
 
-  function finishTaskHandler(task){
-    if(task === tasks[selectedTaskIndex]){
-      headerMessageHandler('finishTaskHandler', false)
-      task.finishTime = Date.now()
-      setFinishedTasks([task, ...finishedTasks])
-      setTasks(() => tasks.slice(0, selectedTaskIndex).concat(tasks.slice(selectedTaskIndex + 1, tasks.length)))
-      setSelectedTaskIndex(() => tasks.length > 1 ? mod(selectedTaskIndex, tasks.length - 1) : 0)
-    }
+  function finishTasksHandler(tasksToFinish){
+    headerMessageHandler('finishTaskHandler', false)
+    tasksToFinish.map(t => t.finishTime = Date.now())
+    setFinishedTasks([...tasksToFinish, ...finishedTasks])
+    setTasks(() => tasks.filter(t => !tasksToFinish.includes(t)))
+    setSelectedTaskIndex(() => tasks.length > 1 ? mod(selectedTaskIndex, tasks.length - 1) : 0)
   }
 
   function restoreTaskHandler(task){
@@ -140,25 +136,28 @@ function App() {
         sortFuncs={Object.keys(sortFuncs)} 
         onChangeSorting={changeSortHandler}
         currPage={currPage}
-        // currSortFunc={currSortFuncName}
       />
       <div className='main-page'>
         {headerMessage[0] && <p className={`flex-item message ${headerMessage[1] ? 'error' : 'info'}`}>{headerMessage[0]}</p>}
         {currPage === 'Main' && <MainPage/>}
         {currPage === 'Add Task' && <NewTaskView onSaveTask={addTaskHandler} onError={headerMessageHandler}/>}
         {currPage === 'Edit Task' && <EditTaskPage task={tasks[selectedTaskIndex]} onSaveTask={editSaveHandler} onError={headerMessageHandler}/>}
-        {currPage === 'All Tasks' && <AllTasksPage tasks={tasks} onRemoveTask={removeTaskHandler} onTaskSelect={taskSelectHandler}/>}
+        {currPage === 'All Tasks' && <AllTasksPage tasks={tasks} onRemoveTasks={removeTasksHandler} onTaskSelect={taskSelectHandler} onEditTask='' onFinishTasks={finishTasksHandler}/>}
         {currPage === 'Next Task' && <TaskCarouselPage 
                                         task={tasks.length > 0 ? tasks[selectedTaskIndex] : null} 
                                         onIncDecIndex={changeSelectedTaskIndex}
                                         onEditTask={editTaskHandler}
-                                        onRemoveTask={removeTaskHandler} 
-                                        onFinishTask={finishTaskHandler}
+                                        onRemoveTasks={removeTasksHandler} 
+                                        onFinishTasks={finishTasksHandler}
                                         index={selectedTaskIndex + 1}
                                         length={tasks.length}
                                       />}
         {console.log(`${tasks} ,  ${JSON.stringify(tasks)} ,  ${selectedTaskIndex}`)}
-        {currPage === 'History' && <HistoryPage finishedTasks={finishedTasks} deletedTasks={deletedTasks} onRestoreTask={restoreTaskHandler}/>}
+        {currPage === 'History' && <HistoryPage 
+                                        finishedTasks={finishedTasks} 
+                                        deletedTasks={deletedTasks} 
+                                        onRestoreTask={restoreTaskHandler} 
+                                        onTaskSelect={t => console.log(JSON.stringify(t))}/>}
       </div>
 
     </div>

@@ -2,7 +2,7 @@ import { GoArrowRight, GoArrowLeft, GoTrash, GoPencil, GoCheck } from "react-ico
 import MiddleSectionMessage from "../MiddleSectionMessage";
 import { Fragment } from "react";
 
-function TaskCarouselPage({ task, onIncDecIndex, onEditTask, onRemoveTask, onFinishTask, index, length }){
+function TaskCarouselPage({ task, onIncDecIndex, onEditTask, onRemoveTasks, onFinishTasks, index, length }){
     console.log(`${task} ,  ${JSON.stringify(task)}`)
     return <>
         {task ?
@@ -11,9 +11,9 @@ function TaskCarouselPage({ task, onIncDecIndex, onEditTask, onRemoveTask, onFin
             <div className="flex-item">
                 <div className="horizontal-array">
                     <button disabled={length <= 1} onClick={() => onIncDecIndex(-1)}><GoArrowLeft fontSize='1.5rem'/><br/><small>Previous</small></button>
-                    <button onClick={() => onRemoveTask(task)}><GoTrash fontSize='1.5rem'/><br/><small>Remove</small></button>
+                    <button onClick={() => onRemoveTasks([task])}><GoTrash fontSize='1.5rem'/><br/><small>Remove</small></button>
                     <button onClick={() => onEditTask(task)}><GoPencil fontSize='1.5rem'/><br/><small>Edit</small></button>
-                    <button onClick={() => onFinishTask(task)}><GoCheck fontSize='1.5rem'/><br/><small>Finish</small></button>
+                    <button onClick={() => onFinishTasks([task])}><GoCheck fontSize='1.5rem'/><br/><small>Finish</small></button>
                     <button disabled={length <= 1} onClick={() => onIncDecIndex(1)}><GoArrowRight fontSize='1.5rem'/><br/><small>Next</small></button>
                 </div>
                 <footer className="center" ><small style={{color: 'grey'}}>{index} out of {length}</small></footer>
