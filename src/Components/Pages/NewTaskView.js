@@ -4,7 +4,7 @@ import '../components.css'
 
 function NewTaskView({ task, onSaveTask, onError }){
 
-    console.log(task ? JSON.stringify(task) : 'null')
+    //console.log(task ? JSON.stringify(task) : 'null')
     
     const taskNameRef = useRef()
     const taskDescRef = useRef()

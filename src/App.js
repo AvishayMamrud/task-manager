@@ -9,14 +9,24 @@ import HistoryPage from './Components/Pages/HistoryPage';
 import EditTaskPage from './Components/Pages/EditTaskPage';
 
 class Task{
-  constructor(name, desc, priority, deadline){
+  // idCounter() {
+  //   let counter = 0;
+  //   return function (){
+  //     return counter++;
+  //   }
+  // }
+  constructor(name, desc, priority, deadline, tags = []){
+    // this.id = this.idCounter;
     this.name = name;
     this.desc = desc;
     this.priority = priority;
     this.currentAge = priority;
     this.deadline = deadline;
+    // this.tags = tags
   }
 }
+
+// const tags = new Map();
 
 const sortFuncs = {
   priority: (a, b) => {return a?.priority - b?.priority},
@@ -48,13 +58,13 @@ function App() {
   }
   
   function addTaskHandler(name, desc, priority, deadline){
-    console.log('addTaskHandler')
+    //console.log('addTaskHandler')
     if(tasks.filter(t => t.name === name).length > 0){
       headerMessageHandler(`The name '${name}' already exists. choose a different one.`, true)
     }else{
       tasks.push(new Task(name, desc, priority, deadline))
-      console.log(currSortFuncName)
-      console.log(typeof currSortFuncName)
+      //console.log(currSortFuncName)
+      //console.log(typeof currSortFuncName)
       // (priority, 5))
       setTasks(() => tasks.sort(sortFuncs[[currSortFuncName]]))
       headerMessageHandler('addTaskHandler', false)
@@ -72,20 +82,20 @@ function App() {
   function taskSelectHandler(task){
     let index = tasks.findIndex(t => t.name === task.name)
     index = index >= 0 ? index : 0
-    console.log(`index - ${index}`)
+    //console.log(`index - ${index}`)
     setSelectedTaskIndex(index)
     setCurrPage('Next Task')
   }
 
   function changeSortHandler(sortFuncName){
-    console.log('changeSortHandler')
+    //console.log('changeSortHandler')
     headerMessageHandler('changeSortHandler', false)
     setCurrSortFuncName(sortFuncName)
     setTasks(tasks.sort(sortFuncs[[sortFuncName]]))
   }
 
   function changeSelectedTaskIndex(increment){
-    console.log('changeSelectedTaskIndex')
+    //console.log('changeSelectedTaskIndex')
     if(currPage !== 'Next Task'){
       setCurrPage('Next Task')
     }
@@ -100,8 +110,17 @@ function App() {
     setSelectedTaskIndex(() => tasks.length > 1 ? mod(selectedTaskIndex, tasks.length - 1) : 0)
   }
 
-  function restoreTaskHandler(task){
-
+  function permanentDeleteHandler(tasks_to_delete){
+    console.log(`tasks_to_delete - ${JSON.stringify(tasks_to_delete)}`)
+    setFinishedTasks(() => finishedTasks.filter(t => tasks_to_delete[0].every(x => x.name !== t.name)))
+    setDeletedTasks(() => deletedTasks.filter(t => tasks_to_delete[1].every(x => x.name !== t.name)))
+  }
+  
+  function restoreTasksHandler(tasks_to_restore){
+    // tasks_to_restore[0].forEach(t => delete t.finishTime)
+    // tasks_to_restore[1].forEach(t => delete t.finishTime)
+    permanentDeleteHandler(tasks_to_restore)
+    setTasks(() => [...tasks, ...tasks_to_restore.flat()])
   }
 
   function editTaskHandler(task){
@@ -109,14 +128,13 @@ function App() {
   }
 
   function editSaveHandler(task, name, desc, priority, deadline){
-    // const foundTask = tasks.filter(t => t.name === task.name)
-    console.log(`tasks[selectedTaskIndex] - ${tasks[selectedTaskIndex]} ,  `)
+    //console.log(`tasks[selectedTaskIndex] - ${tasks[selectedTaskIndex]} ,  `)
     if(tasks[selectedTaskIndex].name !== task.name){
       headerMessageHandler(`The has been a complecation...`, true)
     }else{
       tasks[selectedTaskIndex] = new Task(name, desc, priority, deadline)
-      console.log(currSortFuncName)
-      console.log(typeof currSortFuncName)
+      //console.log(currSortFuncName)
+      //console.log(typeof currSortFuncName)
       setTasks(() => tasks)
       headerMessageHandler('editSaveHandler', false)
     }
@@ -127,7 +145,7 @@ function App() {
   // return <div className='app'>
   //   <MainPage/>
   // </div>
-  console.log(Object.keys(sortFuncs))
+  //console.log(Object.keys(sortFuncs))
   return (
     <div className='app'>
       <SideMenu 
@@ -152,11 +170,11 @@ function App() {
                                         index={selectedTaskIndex + 1}
                                         length={tasks.length}
                                       />}
-        {console.log(`${tasks} ,  ${JSON.stringify(tasks)} ,  ${selectedTaskIndex}`)}
         {currPage === 'History' && <HistoryPage 
                                         finishedTasks={finishedTasks} 
                                         deletedTasks={deletedTasks} 
-                                        onRestoreTask={restoreTaskHandler} 
+                                        onRestoreTasks={restoreTasksHandler}
+                                        onPermanentDelete={permanentDeleteHandler} 
                                         onTaskSelect={t => console.log(JSON.stringify(t))}/>}
       </div>
 

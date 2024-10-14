@@ -10,14 +10,13 @@ function SideMenu({ buttons, onPageSelect, currPage, onChangeSorting, sortFuncs 
                     <tr key={e}>
                         <td>
                             <button 
-                                className={currPage === e && 'clicked'} 
+                                className={currPage === e ? 'clicked' : ''} 
                                 onClick={() => onPageSelect(e)}>
                                     {e}
                             </button>
                         </td>
                     </tr>)
                 }
-                {console.log(`lhbiu - ${sortFuncs}`)}
                 <tr key='dropdown'>
                     <td><Dropdown options={sortFuncs} onSelect={onChangeSorting}/></td>
                 </tr>

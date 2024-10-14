@@ -3,7 +3,7 @@ import MiddleSectionMessage from "../MiddleSectionMessage";
 import { Fragment } from "react";
 
 function TaskCarouselPage({ task, onIncDecIndex, onEditTask, onRemoveTasks, onFinishTasks, index, length }){
-    console.log(`${task} ,  ${JSON.stringify(task)}`)
+    //console.log(`${task} ,  ${JSON.stringify(task)}`)
     return <>
         {task ?
         <Fragment>

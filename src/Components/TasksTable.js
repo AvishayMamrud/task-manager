@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import MiddleSectionMessage from "./MiddleSectionMessage";
 
-// 1. add support for tags in MdDescription
+// 1. add support for tags in description
 // 2. add a search box in the tasks display page and history page 
 // 3. implement edit tags in the tasks display page and history page
 // 4. check for auto complete for tags
@@ -11,15 +11,22 @@ import MiddleSectionMessage from "./MiddleSectionMessage";
 
 
 
-function TasksTable({ tasks, onTaskSelect, onMultipleSelect, isFinished, isDeleted }){
-    const msg = isDeleted ? 'Deleted' : isFinished ? 'Finised' : ''
-    return <div className="">
-        <h4 style={{fontStyle: 'italic', border: '1px dotted grey', borderRadius: '.5rem', margin: '1rem 5rem'}}><italic>{msg} Tasks</italic></h4>
-        {tasks.length >0 ?
+function TasksTable({ tasks, onTaskSelect, onMultipleSelect, isFinished = false, isDeleted = false }){
+    const msg = isDeleted ? 'Deleted' : isFinished ? 'Finished' : ''
+    const [defaulCheck, setDefaulCheck] = useState(false)
+    function selectAll(val){
+        setDefaulCheck(val)
+        onMultipleSelect(tasks, isDeleted, isFinished, val)
+    }
+
+    return <div>
+        <h4 style={{fontStyle: 'italic', border: '1px dotted grey', borderRadius: '.5rem', margin: '1rem 5rem'}}>{msg} Tasks</h4>
+        {tasks.length > 0 ?
         <table className="task-table">
             <thead>
                 <tr>
                     <th></th>
+                    {/* <input type="checkbox" onChange={e => selectAll(e.target.checked)}/> */}
                     <th>Name</th>
                     <th>Priority</th>
                     <th>Deadline</th>
@@ -29,7 +36,7 @@ function TasksTable({ tasks, onTaskSelect, onMultipleSelect, isFinished, isDelet
             </thead>
             <tbody>
                 {tasks.map(t => <tr key={`task${t.name}`}>
-                                    <td><input type="checkbox" onChange={(e) => onMultipleSelect(t, isFinished, isDeleted, e.target.checked)}/></td>
+                                    <td><input type="checkbox" onChange={(e) => onMultipleSelect([t], isDeleted, isFinished, e.target.checked)} /></td>
                                     <td onClick={() => onTaskSelect(t)}>{t.name}</td>
                                     <td onClick={() => onTaskSelect(t)}>{t.priority}</td>
                                     <td onClick={() => onTaskSelect(t)}>{t.finishTime && new Date(t.deadline).toLocaleDateString('en-GB')}</td>

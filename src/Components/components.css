@@ -37,12 +37,18 @@ button, select {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: baseline;
     gap: 1rem;
     button {
         background-color: inherit;
         border: none;
         width: 10ch;
     }
+    /* * {
+        border: 1px solid black;
+        background: red;
+        margin: auto 0;
+    } */
 }
 
 .main-page {
@@ -164,6 +170,9 @@ button, select {
     &:hover {
         border: .5px solid royalblue;
     }
+    &:focus {
+        outline: none;
+    }
 }
 
 textarea {
@@ -189,4 +198,21 @@ html{
     height: 100px;
     border: 1px solid red;
     text-align: center;
+}
+
+.search {
+    margin: .3rem;
+    border-radius: .5ch;
+    border: 1px dotted grey;
+    background: white;
+    width: auto;
+    gap: 0;
+    input {
+        width: 50dvw;
+        line-height: 4ch;
+        border-radius: .5ch;
+        border: none;
+        font-size: large;
+        outline: none;
+    }
 }
