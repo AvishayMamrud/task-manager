@@ -3,7 +3,6 @@ import MiddleSectionMessage from "../MiddleSectionMessage";
 import { Fragment } from "react";
 
 function TaskCarouselPage({ task, onIncDecIndex, onEditTask, onRemoveTasks, onFinishTasks, index, length }){
-    //console.log(`${task} ,  ${JSON.stringify(task)}`)
     return <>
         {task ?
         <Fragment>
@@ -26,10 +25,10 @@ function TaskCarouselPage({ task, onIncDecIndex, onEditTask, onRemoveTasks, onFi
 function Task({ name, desc, priority, currentAge, deadline }){
     return <div className="flex-item flexed">
         <div>
-        <p>{name}</p>
-        <p>{desc}</p>
-        <p>{priority}</p>
-        <p>{deadline}</p>
+        <h3>{name}</h3>
+        <p style={{textAlign: "start", textWrap: "wrap"}}>{desc}</p>
+        <p>Priority level: <strong>{priority}</strong></p>
+        {deadline && <p>deadline: <strong>{deadline}</strong></p>}
         </div>
     </div>
 }

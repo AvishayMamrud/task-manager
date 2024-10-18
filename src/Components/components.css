@@ -15,20 +15,35 @@
         &:focus {
             outline: none;
         }
+        &:hover {
+            border-radius: 1rem;
+        }
     }
 }
 
 button, select {
-    padding: 1ch;
+    color: darkslategrey;
+    background: inherit;
+    border-radius: .3rem;
+    font-size: large;
+    font-family: 'Source Sans Pro', sans-serif;
+    border: none;
     cursor: pointer;
+    padding: 1ch;
+    &.distinct-btn {
+        margin: .3ch;
+        padding: 1ch 2ch;
+        background-color: rgb(48, 174, 48);
+        color: white;
+    }
+
     &:hover {
-        transform: translate(-0.2ch, -0.2ch);
-        font-weight: bold;
-        background-color: lightskyblue;
-        border-radius: 1rem;
+        translate: -0.2ch -0.2ch;
+        /* font-weight: bold; */
+        box-shadow: 2px 2px 5px grey;
     }
     &.clicked {
-        transform: translate(-0.2ch, -0.2ch);
+        translate: -0.2ch -0.2ch;
         font-weight: bold;
     }
 }
@@ -176,9 +191,9 @@ button, select {
 }
 
 textarea {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
+	/* -webkit-box-sizing: border-box; */
+	/* -moz-box-sizing: border-box; */
+	/* box-sizing: border-box; */
     resize: none;
 	width: 50dvw;
 }

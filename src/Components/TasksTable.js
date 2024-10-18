@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import MiddleSectionMessage from "./MiddleSectionMessage";
+import Dialog from "./Dialog";
 
 // 1. add support for tags in description
-// 2. add a search box in the tasks display page and history page 
+///////// 2. add a search box in the tasks display page and history page
 // 3. implement edit tags in the tasks display page and history page
 // 4. check for auto complete for tags
-// 5. implement pop-up dialog when clicking on History page 
+// 5. implement pop-up dialog when clicking on History page
 //    to choose Restore, Edit and restore or Parmenently delete
 // 6. implement pop-up dialog of "Are you sure?" before multiselected tasks function execution
-
 
 
 function TasksTable({ tasks, onTaskSelect, onMultipleSelect, isFinished = false, isDeleted = false }){
@@ -37,11 +37,11 @@ function TasksTable({ tasks, onTaskSelect, onMultipleSelect, isFinished = false,
             <tbody>
                 {tasks.map(t => <tr key={`task${t.name}`}>
                                     <td><input type="checkbox" onChange={(e) => onMultipleSelect([t], isDeleted, isFinished, e.target.checked)} /></td>
-                                    <td onClick={() => onTaskSelect(t)}>{t.name}</td>
-                                    <td onClick={() => onTaskSelect(t)}>{t.priority}</td>
-                                    <td onClick={() => onTaskSelect(t)}>{t.finishTime && new Date(t.deadline).toLocaleDateString('en-GB')}</td>
-                                    {isFinished && t.finishTime && <td onClick={() => onTaskSelect(t)}>{new Date(t.finishTime).toLocaleDateString('en-GB')}</td>}
-                                    {isDeleted && t.finishTime && <td onClick={() => onTaskSelect(t)}>{new Date(t.finishTime).toLocaleDateString('en-GB')}</td>}
+                                    <td onClick={() => onTaskSelect(t, isDeleted, isFinished)}>{t.name}</td>
+                                    <td onClick={() => onTaskSelect(t, isDeleted, isFinished)}>{t.priority}</td>
+                                    <td onClick={() => onTaskSelect(t, isDeleted, isFinished)}>{t.deadline && new Date(t.deadline).toLocaleDateString('en-GB')}</td>
+                                    {isFinished && t.finishTime && <td onClick={() => onTaskSelect(t, isDeleted, isFinished)}>{new Date(t.finishTime).toLocaleDateString('en-GB')}</td>}
+                                    {isDeleted && t.finishTime && <td onClick={() => onTaskSelect(t, isDeleted, isFinished)}>{new Date(t.finishTime).toLocaleDateString('en-GB')}</td>}
                                 </tr>)}
             </tbody>
         </table> : 

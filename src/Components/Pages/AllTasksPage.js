@@ -20,14 +20,12 @@ function AllTasksPage({ tasks, onRemoveTasks, onTaskSelect, onEditTask, onFinish
     }
 
     function finishSelected(){
-        //console.log(`selection - ${JSON.stringify(selection)}`)
         onFinishTasks(selection)
         setFiltered(tasks.filter(t => selection.every(x => x.name !== t.name)))
         setSelection([])
     }
 
     function editTags(){
-        //console.log('asdfghjkl')
     }
 
     function searchHandler(phrase){

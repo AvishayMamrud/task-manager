@@ -2,11 +2,10 @@ import React from "react";
 import '../../App.css'
 import NewTaskView from "./NewTaskView";
 
-function EditTaskPage({ task, onSaveTask, onError }){
-    //console.log(JSON.stringify(task))
+function EditTaskPage(props){
     
     return <>
-        <NewTaskView task={task} onSaveTask={onSaveTask} onError={onError}/>
+        <NewTaskView {...props}/>
     </>
 }
 

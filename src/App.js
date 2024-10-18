@@ -39,7 +39,6 @@ function mod(n, m) {
 }
 
 function App() {
-  
   const [currPage, setCurrPage] = useState('Main')
   const [tasks, setTasks] = useState([]);
   const [finishedTasks, setFinishedTasks] = useState([])
@@ -58,13 +57,10 @@ function App() {
   }
   
   function addTaskHandler(name, desc, priority, deadline){
-    //console.log('addTaskHandler')
     if(tasks.filter(t => t.name === name).length > 0){
       headerMessageHandler(`The name '${name}' already exists. choose a different one.`, true)
     }else{
       tasks.push(new Task(name, desc, priority, deadline))
-      //console.log(currSortFuncName)
-      //console.log(typeof currSortFuncName)
       // (priority, 5))
       setTasks(() => tasks.sort(sortFuncs[[currSortFuncName]]))
       headerMessageHandler('addTaskHandler', false)
@@ -73,29 +69,26 @@ function App() {
 
   function removeTasksHandler(tasksToRemove){
     headerMessageHandler('removeTaskHandler', false)
-    tasksToRemove.map(t => t.finishTime = Date.now())
+    tasksToRemove.map(t => t.finishTime = Date.now().toString())
     setDeletedTasks([...tasksToRemove, ...deletedTasks])
     setTasks(() => tasks.filter(t => !tasksToRemove.includes(t)))
     setSelectedTaskIndex(() => tasks.length > 1 ? mod(selectedTaskIndex, tasks.length - 1) : 0)
   }
 
-  function taskSelectHandler(task){
+  function taskSelectHandler(task, isDeleted, isFinished){
     let index = tasks.findIndex(t => t.name === task.name)
     index = index >= 0 ? index : 0
-    //console.log(`index - ${index}`)
     setSelectedTaskIndex(index)
     setCurrPage('Next Task')
   }
 
   function changeSortHandler(sortFuncName){
-    //console.log('changeSortHandler')
     headerMessageHandler('changeSortHandler', false)
     setCurrSortFuncName(sortFuncName)
     setTasks(tasks.sort(sortFuncs[[sortFuncName]]))
   }
 
   function changeSelectedTaskIndex(increment){
-    //console.log('changeSelectedTaskIndex')
     if(currPage !== 'Next Task'){
       setCurrPage('Next Task')
     }
@@ -111,7 +104,6 @@ function App() {
   }
 
   function permanentDeleteHandler(tasks_to_delete){
-    console.log(`tasks_to_delete - ${JSON.stringify(tasks_to_delete)}`)
     setFinishedTasks(() => finishedTasks.filter(t => tasks_to_delete[0].every(x => x.name !== t.name)))
     setDeletedTasks(() => deletedTasks.filter(t => tasks_to_delete[1].every(x => x.name !== t.name)))
   }
@@ -128,24 +120,20 @@ function App() {
   }
 
   function editSaveHandler(task, name, desc, priority, deadline){
-    //console.log(`tasks[selectedTaskIndex] - ${tasks[selectedTaskIndex]} ,  `)
     if(tasks[selectedTaskIndex].name !== task.name){
       headerMessageHandler(`The has been a complecation...`, true)
     }else{
       tasks[selectedTaskIndex] = new Task(name, desc, priority, deadline)
-      //console.log(currSortFuncName)
-      //console.log(typeof currSortFuncName)
-      setTasks(() => tasks)
+      setTasks(() => tasks.sort(sortFuncs[[currSortFuncName]]))
+      setCurrPage('Next Task')
       headerMessageHandler('editSaveHandler', false)
     }
   }
-
 
   const pageNames = ['Add Task', 'Edit Task', 'All Tasks', 'Next Task', 'History']
   // return <div className='app'>
   //   <MainPage/>
   // </div>
-  //console.log(Object.keys(sortFuncs))
   return (
     <div className='app'>
       <SideMenu 
@@ -175,7 +163,8 @@ function App() {
                                         deletedTasks={deletedTasks} 
                                         onRestoreTasks={restoreTasksHandler}
                                         onPermanentDelete={permanentDeleteHandler} 
-                                        onTaskSelect={t => console.log(JSON.stringify(t))}/>}
+                                        // onTaskSelect={historySelectHandler}
+                                        />}
       </div>
 
     </div>
